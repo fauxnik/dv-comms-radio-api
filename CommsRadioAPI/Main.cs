@@ -5,7 +5,7 @@ using UnityModManagerNet;
 
 namespace CommsRadioAPI;
 
-private static class Main
+internal static class Main
 {
 	// Unity Mod Manage Wiki: https://wiki.nexusmods.com/index.php/Category:Unity_Mod_Manager
 	private static bool Load(UnityModManager.ModEntry modEntry)

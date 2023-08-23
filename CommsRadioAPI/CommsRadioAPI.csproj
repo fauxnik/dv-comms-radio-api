@@ -15,6 +15,7 @@
 	<!-- Unity -->
 	<ItemGroup>
 		<Reference Include="UnityEngine"/>
+		<Reference Include="UnityEngine.AudioModule"/>
 		<Reference Include="UnityEngine.CoreModule"/>
 	</ItemGroup>
 
