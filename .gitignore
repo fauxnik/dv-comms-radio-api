@@ -4,6 +4,10 @@ Directory.Build.targets
 # Local preferences
 .vscode/
 
+# Local helper scripts
+build-debug.ps1
+build-release.ps1
+
 # Packaging directories
 [Bb]uild/
 [Dd]ist/

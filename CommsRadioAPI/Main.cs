@@ -3,9 +3,9 @@ using System.Reflection;
 using HarmonyLib;
 using UnityModManagerNet;
 
-namespace MOD_NAME;
+namespace CommsRadioAPI;
 
-public static class Main
+private static class Main
 {
 	// Unity Mod Manage Wiki: https://wiki.nexusmods.com/index.php/Category:Unity_Mod_Manager
 	private static bool Load(UnityModManager.ModEntry modEntry)

@@ -9,14 +9,14 @@
 
 <!-- PROJECT TITLE -->
 <div align="center">
-	<h1>Unity Mod Manager Mod Template</h1>
+	<h1>Comms Radio API</h1>
 	<p>
-		A template for creating <a href="http://www.derailvalley.com/">Derail Valley</a> mods that load via <a href="https://www.nexusmods.com/site/mods/21">Unity Mod Manager</a>.
+		A framework mod for <a href="http://www.derailvalley.com/">Derail Valley</a> that enables other mods to more easily create entries in the comms radio.
 		<br />
 		<br />
-		<a href="https://github.com/derail-valley-modding/template-umm/issues">Report Bug</a>
+		<a href="https://github.com/fauxnik/dv-comms-radio-api/issues">Report Bug</a>
 		·
-		<a href="https://github.com/derail-valley-modding/template-umm/issues">Request Feature</a>
+		<a href="https://github.com/fauxnik/dv-comms-radio-api/issues">Request Feature</a>
 	</p>
 </div>
 
@@ -28,6 +28,7 @@
 	<summary>Table of Contents</summary>
 	<ol>
 		<li><a href="#about-the-project">About The Project</a></li>
+		<li><a href="#api-documentation">API Documentation</a></li>
 		<li><a href="#building">Building</a></li>
 		<li><a href="#packaging">Packaging</a></li>
 		<li><a href="#license">License</a></li>
@@ -41,8 +42,16 @@
 
 ## About The Project
 
-This is a template for Derail Valley mods that load via the Unity Mod Manager mod loader.  
-TODO: Instructions for how mod creators use this template.
+A framework mod for <a href="http://www.derailvalley.com/">Derail Valley</a> that enables other mods to more easily create entries in the comms radio.
+
+
+
+
+<!-- API DOCUMENTATION -->
+
+## API Documentation
+
+TODO: write API documentation here
 
 
 
@@ -55,7 +64,7 @@ Building the project requires some initial setup, after which running `dotnet bu
 
 ### References Setup
 
-After cloning the repository, some setup is required in order to successfully build the mod DLLs. You will need to create a new [Directory.Build.targets][references-url] file to specify your local reference paths. This file will be located in the main directory, next to MOD_NAME.sln.
+After cloning the repository, some setup is required in order to successfully build the mod DLLs. You will need to create a new [Directory.Build.targets][references-url] file to specify your local reference paths. This file will be located in the main directory, next to CommsRadioAPI.sln.
 
 Below is an example of the necessary structure. When creating your targets file, you will need to replace the reference paths with the corresponding folders on your system. Make sure to include semicolons **between** each of the paths and no semicolon after the last path. Also note that any shortcuts you might use in file explorer—such as %ProgramFiles%—won't be expanded in these paths. You have to use full, absolute paths.
 ```xml
@@ -115,15 +124,15 @@ See [LICENSE][license-url] for more information.
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[contributors-shield]: https://img.shields.io/github/contributors/derail-valley-modding/template-umm.svg?style=for-the-badge
-[contributors-url]: https://github.com/derail-valley-modding/template-umm/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/derail-valley-modding/template-umm.svg?style=for-the-badge
-[forks-url]: https://github.com/derail-valley-modding/template-umm/network/members
-[stars-shield]: https://img.shields.io/github/stars/derail-valley-modding/template-umm.svg?style=for-the-badge
-[stars-url]: https://github.com/derail-valley-modding/template-umm/stargazers
-[issues-shield]: https://img.shields.io/github/issues/derail-valley-modding/template-umm.svg?style=for-the-badge
-[issues-url]: https://github.com/derail-valley-modding/template-umm/issues
-[license-shield]: https://img.shields.io/github/license/derail-valley-modding/template-umm.svg?style=for-the-badge
-[license-url]: https://github.com/derail-valley-modding/template-umm/blob/master/LICENSE
+[contributors-shield]: https://img.shields.io/github/contributors/fauxnik/dv-comms-radio-api.svg?style=for-the-badge
+[contributors-url]: https://github.com/fauxnik/dv-comms-radio-api/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/fauxnik/dv-comms-radio-api.svg?style=for-the-badge
+[forks-url]: https://github.com/fauxnik/dv-comms-radio-api/network/members
+[stars-shield]: https://img.shields.io/github/stars/fauxnik/dv-comms-radio-api.svg?style=for-the-badge
+[stars-url]: https://github.com/fauxnik/dv-comms-radio-api/stargazers
+[issues-shield]: https://img.shields.io/github/issues/fauxnik/dv-comms-radio-api.svg?style=for-the-badge
+[issues-url]: https://github.com/fauxnik/dv-comms-radio-api/issues
+[license-shield]: https://img.shields.io/github/license/fauxnik/dv-comms-radio-api.svg?style=for-the-badge
+[license-url]: https://github.com/fauxnik/dv-comms-radio-api/blob/master/LICENSE
 [references-url]: https://learn.microsoft.com/en-us/visualstudio/msbuild/customize-your-build?view=vs-2022
 [autocrlf-url]: https://www.git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_formatting_and_whitespace
