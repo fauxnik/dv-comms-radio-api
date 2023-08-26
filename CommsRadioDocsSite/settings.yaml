@@ -1,3 +1,2 @@
 SourceFiles:
-  - ../CommsRadioAPI/**/{!.git,!bin,!obj,!packages,!*.Tests,}/**/*.cs
   - ../../CommsRadioAPI/**/{!.git,!bin,!obj,!packages,!*.Tests,}/**/*.cs
