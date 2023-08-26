@@ -12,11 +12,11 @@ public static class CommsRadioController
 	internal static CommsRadioMode AddMode(Predicate<ICommsRadioMode>? insertBeforeTest)
 	{
 		DV.CommsRadioController? controller = Accessor.CommsRadioController;
-		if (controller == null) { throw new InvalidOperationException(); }
+		if (controller == null) { throw new InvalidOperationException("CommsRadioController should not be null."); }
 
 		FieldInfo allModesFieldInfo = typeof(DV.CommsRadioController).GetField("allModes", BindingFlags.NonPublic | BindingFlags.Instance);
 		List<ICommsRadioMode>? allModes = allModesFieldInfo.GetValue(controller) as List<ICommsRadioMode>;
-		if (allModes == null) { throw new NoNullAllowedException(); }
+		if (allModes == null) { throw new NoNullAllowedException("Couldn't retrieve allModes from CommsRadioController."); }
 
 		CommsRadioMode mode = controller.gameObject.AddComponent<CommsRadioMode>();
 		int spawnerIndex = allModes.FindIndex(insertBeforeTest ?? (mode => false));
@@ -27,17 +27,17 @@ public static class CommsRadioController
 		return mode;
 	}
 
-	public static void PlaySound(CommsRadioSound sound, Transform source)
+	public static void PlaySound(CommsSound sound, Transform source)
 	{
 		AudioClip? audio = sound switch
 		{
-			CommsRadioSound.Confirm => Accessor.ConfirmSound,
-			CommsRadioSound.Cancel => Accessor.CancelSound,
-			CommsRadioSound.Warning => Accessor.WarningSound,
-			CommsRadioSound.Switch => Accessor.SwitchSound,
-			CommsRadioSound.ModeEnter => Accessor.ModeEnterSound,
-			CommsRadioSound.HoverOver => Accessor.HoverOverSound,
-			CommsRadioSound.MoneyRemoved => Accessor.MoneyRemovedSound,
+			CommsSound.Confirm => Accessor.ConfirmSound,
+			CommsSound.Cancel => Accessor.CancelSound,
+			CommsSound.Warning => Accessor.WarningSound,
+			CommsSound.Switch => Accessor.SwitchSound,
+			CommsSound.ModeEnter => Accessor.ModeEnterSound,
+			CommsSound.HoverOver => Accessor.HoverOverSound,
+			CommsSound.MoneyRemoved => Accessor.MoneyRemovedSound,
 			_ => null,
 		};
 		if (audio == null)

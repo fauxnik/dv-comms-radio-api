@@ -7,6 +7,7 @@ namespace CommsRadioAPI;
 
 public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 {
+	private CommsRadioUtility proxy;
 	private Color laserColor = Color.white;
 	private StateActionUpdateHandler? startingState;
 	private StateActionUpdateHandler? activeState;
@@ -14,6 +15,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 
 	public static CommsRadioMode Create(StateActionUpdateHandler startingState, Color? laserColor, Predicate<ICommsRadioMode>? insertBeforeTest)
 	{
+		if (startingState.state.behaviour != ButtonBehaviourType.Regular) { throw new ArgumentException($"Starting state must have a button beviour type of Regular, but it has {startingState.state.behaviour}."); }
 		CommsRadioMode mode = CommsRadioController.AddMode(insertBeforeTest);
 		mode.laserColor = laserColor ?? Color.white;
 		mode.startingState = startingState;
@@ -21,10 +23,20 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 		return mode;
 	}
 
+	public CommsRadioMode()
+	{
+		proxy = new CommsRadioUtility(this);
+	}
+
 	[DoesNotReturn]
 	private void ThrowNullActiveState()
 	{
-		throw new InvalidOperationException("Active state should never be null. Did you create a CommsRadioMode component without using CommsRadioMode.Create()?");
+		throw new InvalidOperationException("Active state should never be null. Was this CommsRadioMode component created without using CommsRadioMode.Create()?");
+	}
+	[DoesNotReturn]
+	private void ThrowNullStartingState()
+	{
+		throw new InvalidOperationException("Starting state should never be null. Was this CommsRadioMode component created without using CommsRadioMode.Create()?");
 	}
 
 	private void ApplyState()
@@ -38,20 +50,35 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 		ButtonBehaviour = state.behaviour;
 	}
 
+	private void TransitionToState(StateActionUpdateHandler nextState)
+	{
+		if (activeState == nextState) { return; }
+		activeState?.OnLeave(proxy);
+		StopAllCoroutines();
+		nextState.OnEnter(proxy);
+		activeState = nextState;
+		ApplyState();
+	}
+
 	private CommsRadioDisplay? display;
 	private ArrowLCD? lcdArrow;
 	private Light? ledLight;
 
-	private void Awake()
+	public void Awake()
 	{
 		signalOrigin = transform;
 	}
 
 	public void Enable()
-	{}
+	{
+		activeState?.OnEnter(proxy);
+	}
 
 	public void Disable()
-	{}
+	{
+		activeState?.OnLeave(proxy);
+		StopAllCoroutines();
+	}
 
 	public void OverrideSignalOrigin(Transform transform)
 	{
@@ -61,15 +88,15 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 	public void OnUse()
 	{
 		if (activeState == null) { ThrowNullActiveState(); }
-		activeState = activeState.OnAction(InputAction.Activate);
-		ApplyState();
+		var nextState = activeState.OnAction(proxy, InputAction.Activate);
+		if (nextState == activeState) { throw new InvalidOperationException("The Activate action must change the state of the Comms Radio."); }
+		TransitionToState(nextState);
 	}
 
 	public void OnUpdate()
 	{
 		if (activeState == null) { ThrowNullActiveState(); }
-		activeState = activeState.OnUpdate();
-		ApplyState();
+		TransitionToState(activeState.OnUpdate(proxy));
 	}
 
 	public ButtonBehaviourType ButtonBehaviour { get; private set; }
@@ -78,8 +105,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 	{
 		if (activeState == null) { ThrowNullActiveState(); }
 		// TODO: is ButtonA actually the up button?
-		activeState = activeState.OnAction(InputAction.Up);
-		ApplyState();
+		TransitionToState(activeState.OnAction(proxy, InputAction.Up));
 		return true;
 	}
 
@@ -87,15 +113,14 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 	{
 		if (activeState == null) { ThrowNullActiveState(); }
 		// TODO: is ButtonB actually the down button?
-		activeState = activeState.OnAction(InputAction.Down);
-		ApplyState();
+		TransitionToState(activeState.OnAction(proxy, InputAction.Down));
 		return true;
 	}
 
 	public void SetStartingDisplay()
 	{
-		activeState = startingState;
-		ApplyState();
+		if (startingState == null) { ThrowNullStartingState(); }
+		TransitionToState(startingState);
 	}
 
 	public Color GetLaserBeamColor() { return laserColor; }
