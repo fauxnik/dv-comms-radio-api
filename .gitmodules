@@ -1,0 +1,3 @@
+[submodule "CommsRadioDocsSite/theme"]
+	path = CommsRadioDocsSite/theme
+	url = https://github.com/statiqdev/Docable.git
