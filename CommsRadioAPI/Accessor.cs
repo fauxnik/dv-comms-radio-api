@@ -1,3 +1,5 @@
+using DV;
+using HarmonyLib;
 using UnityEngine;
 
 namespace CommsRadioAPI;
@@ -5,6 +7,13 @@ namespace CommsRadioAPI;
 internal static class Accessor
 {
 	internal static DV.CommsRadioController? CommsRadioController { get; private set; }
+
+	internal static CommsRadioDisplay? CommsRadioDisplay { get; private set; }
+	internal static ArrowLCD? CommsRadioArrow { get; private set; }
+	internal static Light? CommsRadioLight { get; private set;}
+
+	internal static Material? ValidMaterial { get; private set; }
+	internal static Material? InvalidMaterial { get; private set; }
 
 	internal static AudioClip? ConfirmSound { get; private set; }
 	internal static AudioClip? CancelSound { get; private set; }
@@ -17,4 +26,36 @@ internal static class Accessor
 	internal static AudioClip? SpawnVehicleSound { get; private set; }
 	internal static AudioClip? SelectVehicleSound { get; private set; }
 	internal static AudioClip? RemoveVehicleSound { get; private set; }
+
+	[HarmonyPatch(typeof(DV.CommsRadioController), "Awake")]
+	internal static class AcquireResourcesPatch
+	{
+		static void Postfix(DV.CommsRadioController __instance)
+		{
+			CommsRadioController = __instance;
+
+			CommsRadioCrewVehicle crewVehicleControl = CommsRadioController.crewVehicleControl;
+			ConfirmSound = crewVehicleControl.confirmSound;
+			CancelSound = crewVehicleControl.cancelSound;
+			WarningSound = crewVehicleControl.warningSound;
+			ModeEnterSound = crewVehicleControl.spawnModeEnterSound;
+			HoverOverSound = crewVehicleControl.hoverOverCar;
+			MoneyRemovedSound = crewVehicleControl.moneyRemovedSound;
+			SpawnVehicleSound = crewVehicleControl.spawnVehicleSound;
+
+			CommsRadioLight lightControl = CommsRadioController.commsRadioLight;
+			SwitchSound = lightControl.switchSound;
+
+			CommsRadioCarDeleter deleteControl = CommsRadioController.deleteControl;
+			SelectVehicleSound = deleteControl.selectedCarSound;
+			RemoveVehicleSound = deleteControl.removeCarSound;
+
+			CommsRadioDisplay = crewVehicleControl.display;
+			CommsRadioArrow = crewVehicleControl.lcdArrow;
+			CommsRadioLight = lightControl.light;
+
+			ValidMaterial = crewVehicleControl.validMaterial;
+			InvalidMaterial = crewVehicleControl.invalidMaterial;
+		}
+	}
 }
