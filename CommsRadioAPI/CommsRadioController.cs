@@ -27,6 +27,29 @@ public static class CommsRadioController
 		return mode;
 	}
 
+	/// <summary>
+	/// Get a vanilla mode from the CommsRadioController.
+	/// </summary>
+	/// <param name="mode">The mode to retrieve.</param>
+	/// <returns></returns>
+	public static ICommsRadioMode? GetVanillaMode(VanillaModes mode)
+	{
+		DV.CommsRadioController? controller = Accessor.CommsRadioController;
+		if (controller == null) { return default; }
+		return mode switch
+		{
+			VanillaModes.Rerail => controller.rerailControl,
+			VanillaModes.Junction => controller.switchControl,
+			VanillaModes.Clear => controller.deleteControl,
+			VanillaModes.SummonCrewVehicle => controller.crewVehicleControl,
+			VanillaModes.Spawn => controller.carSpawnerControl,
+			VanillaModes.LoadCargo => controller.cargoLoaderControl,
+			VanillaModes.Damage => controller.carDamageControl,
+			VanillaModes.LED => controller.commsRadioLight,
+			_ => default,
+		};
+	}
+
 	public static void PlaySound(CommsSound sound, Transform source)
 	{
 		AudioClip? audio = sound switch

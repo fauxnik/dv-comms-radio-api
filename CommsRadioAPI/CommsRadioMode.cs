@@ -13,6 +13,14 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 	private StateActionUpdateHandler? activeState;
 	private Transform? signalOrigin;
 
+	/// <summary>
+	/// Create a new mode entry in the Comms Radio.
+	/// </summary>
+	/// <param name="startingState">The starting state/action/update handler. Its button behavior must be <c>ButtonBehaviourType.Regular</c>.</param>
+	/// <param name="laserColor">The color of the laser beam.</param>
+	/// <param name="insertBeforeTest">Optional.<br/>Return true for the mode the new mode will be inserted before.<br/>If none return true or no predicate is given, the mode will be inserted at the end of the list.</param>
+	/// <returns>The Comms Radio mode that was created.</returns>
+	/// <exception cref="ArgumentException">Throws an exception if the provided starting state has a button behaviour other than <c>ButtonBehaviourType.Regular</c>.</exception>
 	public static CommsRadioMode Create(StateActionUpdateHandler startingState, Color? laserColor, Predicate<ICommsRadioMode>? insertBeforeTest)
 	{
 		if (startingState.state.behaviour != ButtonBehaviourType.Regular) { throw new ArgumentException($"Starting state must have a button beviour type of Regular, but it has {startingState.state.behaviour}."); }
@@ -20,6 +28,12 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 		mode.laserColor = laserColor ?? Color.white;
 		mode.startingState = startingState;
 		mode.activeState = startingState;
+		mode.display = Accessor.CommsRadioDisplay;
+		if (mode.display == null) { Main.LogError("Can't find the Comms Radio LCD display."); }
+		mode.lcdArrow = Accessor.CommsRadioArrow;
+		if (mode.lcdArrow == null) { Main.LogError("Can't find the Comms Radio LCD arrow."); }
+		mode.ledLight = Accessor.CommsRadioLight;
+		if (mode.ledLight == null) { Main.LogError("Can't find the Comms Radio LED light."); }
 		return mode;
 	}
 
@@ -87,6 +101,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 
 	public void OnUse()
 	{
+		Main.Log("Comms Radio activated.");
 		if (activeState == null) { ThrowNullActiveState(); }
 		var nextState = activeState.OnAction(proxy, InputAction.Activate);
 		if (nextState == activeState) { throw new InvalidOperationException("The Activate action must change the state of the Comms Radio."); }
@@ -103,6 +118,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 
 	public bool ButtonACustomAction()
 	{
+		Main.Log("Button A pressed.");
 		if (activeState == null) { ThrowNullActiveState(); }
 		// TODO: is ButtonA actually the up button?
 		TransitionToState(activeState.OnAction(proxy, InputAction.Up));
@@ -111,6 +127,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 
 	public bool ButtonBCustomAction()
 	{
+		Main.Log("Button B pressed.");
 		if (activeState == null) { ThrowNullActiveState(); }
 		// TODO: is ButtonB actually the down button?
 		TransitionToState(activeState.OnAction(proxy, InputAction.Down));
