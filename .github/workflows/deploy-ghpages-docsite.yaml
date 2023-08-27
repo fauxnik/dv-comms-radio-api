@@ -1,5 +1,7 @@
-name: Generate Documentation Website
-run-name: ${{ github.actor }}
+# https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-with-a-custom-github-actions-workflow
+name: deploy-ghpages-docsite
+# github actions ternary operator: https://7tonshark.com/posts/github-actions-ternary-operator/
+run-name: ${{ github.ref == 'refs/heads/main' && 'Deploy to GitHub Pages' || 'Build GitHub Pages artifact' }} by ${{ github.actor }}
 on: [push]
 jobs:
   # Build job
