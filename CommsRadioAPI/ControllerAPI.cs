@@ -7,26 +7,8 @@ using UnityEngine;
 
 namespace CommsRadioAPI;
 
-public static class CommsRadioController
+public static class ControllerAPI
 {
-	internal static CommsRadioMode AddMode(Predicate<ICommsRadioMode>? insertBeforeTest)
-	{
-		DV.CommsRadioController? controller = Accessor.CommsRadioController;
-		if (controller == null) { throw new InvalidOperationException("CommsRadioController should not be null."); }
-
-		FieldInfo allModesFieldInfo = typeof(DV.CommsRadioController).GetField("allModes", BindingFlags.NonPublic | BindingFlags.Instance);
-		List<ICommsRadioMode>? allModes = allModesFieldInfo.GetValue(controller) as List<ICommsRadioMode>;
-		if (allModes == null) { throw new NoNullAllowedException("Couldn't retrieve allModes from CommsRadioController."); }
-
-		CommsRadioMode mode = controller.gameObject.AddComponent<CommsRadioMode>();
-		int spawnerIndex = allModes.FindIndex(insertBeforeTest ?? (mode => false));
-		if (spawnerIndex != -1) { allModes.Insert(spawnerIndex, mode); }
-		else { allModes.Add(mode); }
-		controller.ReactivateModes();
-
-		return mode;
-	}
-
 	/// <summary>
 	/// Get a vanilla mode from the CommsRadioController.
 	/// </summary>
@@ -34,7 +16,7 @@ public static class CommsRadioController
 	/// <returns></returns>
 	public static ICommsRadioMode? GetVanillaMode(VanillaModes mode)
 	{
-		DV.CommsRadioController? controller = Accessor.CommsRadioController;
+		CommsRadioController? controller = Accessor.CommsRadioController;
 		if (controller == null) { return default; }
 		return mode switch
 		{
@@ -50,7 +32,25 @@ public static class CommsRadioController
 		};
 	}
 
-	public static void PlaySound(CommsSound sound, Transform source)
+	internal static CommsRadioMode AddMode(Predicate<ICommsRadioMode>? insertBeforeTest)
+	{
+		CommsRadioController? controller = Accessor.CommsRadioController;
+		if (controller == null) { throw new InvalidOperationException("CommsRadioController should not be null."); }
+
+		FieldInfo allModesFieldInfo = typeof(CommsRadioController).GetField("allModes", BindingFlags.NonPublic | BindingFlags.Instance);
+		List<ICommsRadioMode>? allModes = allModesFieldInfo.GetValue(controller) as List<ICommsRadioMode>;
+		if (allModes == null) { throw new NoNullAllowedException("Couldn't retrieve allModes from CommsRadioController."); }
+
+		CommsRadioMode mode = controller.gameObject.AddComponent<CommsRadioMode>();
+		int spawnerIndex = allModes.FindIndex(insertBeforeTest ?? (mode => false));
+		if (spawnerIndex != -1) { allModes.Insert(spawnerIndex, mode); }
+		else { allModes.Add(mode); }
+		controller.ReactivateModes();
+
+		return mode;
+	}
+
+	internal static void PlaySound(CommsSound sound, Transform source)
 	{
 		AudioClip? audio = sound switch
 		{
@@ -65,14 +65,14 @@ public static class CommsRadioController
 		};
 		if (audio == null)
 		{
-			// TODO: log warning
+			Main.LogWarning($"Can't find audio for {sound}. No sound will be played.");
 			return;
 		}
 
-		DV.CommsRadioController.PlayAudioFromRadio(audio, source);
+		CommsRadioController.PlayAudioFromRadio(audio, source);
 	}
 
-	public static void PlayVehicleSound(VehicleSound sound, TrainCar source, bool parentToWorld = false)
+	internal static void PlayVehicleSound(VehicleSound sound, TrainCar source, bool parentToWorld = false)
 	{
 		AudioClip? audio = sound switch
 		{
@@ -83,10 +83,10 @@ public static class CommsRadioController
 		};
 		if (audio == null)
 		{
-			// TODO: log warning
+			Main.LogWarning($"Can't find audio for {sound}. No sound will be played.");
 			return;
 		}
 
-		DV.CommsRadioController.PlayAudioFromCar(audio, source, parentToWorld);
+		CommsRadioController.PlayAudioFromCar(audio, source, parentToWorld);
 	}
 }

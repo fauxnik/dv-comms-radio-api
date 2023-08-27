@@ -11,7 +11,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 	private Color laserColor = Color.white;
 	private StateActionUpdateHandler? startingState;
 	private StateActionUpdateHandler? activeState;
-	private Transform? signalOrigin;
+	internal Transform? signalOrigin;
 
 	/// <summary>
 	/// Create a new mode entry in the Comms Radio.
@@ -24,7 +24,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 	public static CommsRadioMode Create(StateActionUpdateHandler startingState, Color? laserColor, Predicate<ICommsRadioMode>? insertBeforeTest)
 	{
 		if (startingState.state.behaviour != ButtonBehaviourType.Regular) { throw new ArgumentException($"Starting state must have a button beviour type of Regular, but it has {startingState.state.behaviour}."); }
-		CommsRadioMode mode = CommsRadioController.AddMode(insertBeforeTest);
+		CommsRadioMode mode = ControllerAPI.AddMode(insertBeforeTest);
 		mode.laserColor = laserColor ?? Color.white;
 		mode.startingState = startingState;
 		mode.activeState = startingState;
