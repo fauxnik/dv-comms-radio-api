@@ -117,8 +117,9 @@ class CounterBehaviour : AStateBehaviour
 }
 ```
 
-> ![NOTE]
-> `OnUpdate` is allowed to return `this` if no change in state has occurred in response to the game update tick.  
+> [!NOTE]
+> `OnUpdate` is allowed to return `this` if no change in state has occurred in response to the game update tick.
+>
 > `OnAction` is not allowed to do this. Set the state's button behaviour to `ButtonBehaviourType.Ignore` instead.
 
 ### Full API
