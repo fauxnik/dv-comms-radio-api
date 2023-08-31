@@ -12,8 +12,8 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 {
 	private CommsRadioUtility proxy;
 	private Color laserColor = Color.white;
-	private StateActionUpdateHandler? startingState;
-	private StateActionUpdateHandler? activeState;
+	private AStateBehaviour? startingState;
+	private AStateBehaviour? activeState;
 	internal Transform? signalOrigin;
 
 	/// <summary>
@@ -24,7 +24,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 	/// <param name="insertBefore"><em>Optional.</em><br/>Return true for the mode the new mode will be inserted before.<br/>If none return true or no predicate is given, the mode will be inserted at the end of the list.</param>
 	/// <returns>The Comms Radio mode that was created.</returns>
 	/// <exception cref="ArgumentException">Throws an exception if the provided starting state has a button behaviour other than <c>ButtonBehaviourType.Regular</c>.</exception>
-	public static CommsRadioMode Create(StateActionUpdateHandler startingState, Color? laserColor, Predicate<ICommsRadioMode>? insertBefore)
+	public static CommsRadioMode Create(AStateBehaviour startingState, Color? laserColor, Predicate<ICommsRadioMode>? insertBefore)
 	{
 		if (startingState.state.behaviour != ButtonBehaviourType.Regular) { throw new ArgumentException($"Starting state must have a button beviour type of Regular, but it has {startingState.state.behaviour}."); }
 		CommsRadioMode mode = ControllerAPI.AddMode(insertBefore);
@@ -68,7 +68,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 		ButtonBehaviour = state.behaviour;
 	}
 
-	private void TransitionToState(StateActionUpdateHandler nextState)
+	private void TransitionToState(AStateBehaviour nextState)
 	{
 		if (activeState == nextState) { return; }
 		activeState?.OnLeave(proxy);
@@ -91,7 +91,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 
 	/// <summary>
 	/// <em>Don't use.</em>
-	/// Override <c>StateActionUpdateHandler.OnEnter</c> instead.<br/>
+	/// Override <c>AStateBehaviour.OnEnter</c> instead.<br/>
 	/// Must be public to implement <c>ICommsRadioMode</c>.
 	/// </summary>
 	public void Enable()
@@ -101,7 +101,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 
 	/// <summary>
 	/// <em>Don't use.</em>
-	/// Override <c>StateActionUpdateHandler.OnLeave</c> instead.<br/>
+	/// Override <c>AStateBehaviour.OnLeave</c> instead.<br/>
 	/// Must be public to implement <c>ICommsRadioMode</c>.
 	/// </summary>
 	public void Disable()
@@ -124,7 +124,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 
 	/// <summary>
 	/// <em>Don't use.</em>
-	/// Impelemnt <c>StateActionUpdateHandler.OnAction</c> instead.<br/>
+	/// Impelemnt <c>AStateBehaviour.OnAction</c> instead.<br/>
 	/// Must be public to implement <c>ICommsRadioMode</c>.
 	/// </summary>
 	public void OnUse()
@@ -138,7 +138,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 
 	/// <summary>
 	/// <em>Don't use.</em>
-	/// Override <c>StateActionUpdateHandler.OnUpdate</c> instead.<br/>
+	/// Override <c>AStateBehaviour.OnUpdate</c> instead.<br/>
 	/// Must be public to implement <c>ICommsRadioMode</c>.
 	/// </summary>
 	public void OnUpdate()
@@ -155,7 +155,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 
 	/// <summary>
 	/// <em>Don't use.</em>
-	/// Impelemnt <c>StateActionUpdateHandler.OnAction</c> instead.<br/>
+	/// Impelemnt <c>AStateBehaviour.OnAction</c> instead.<br/>
 	/// Must be public to implement <c>ICommsRadioMode</c>.
 	/// </summary>
 	public bool ButtonACustomAction()
@@ -169,7 +169,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 
 	/// <summary>
 	/// <em>Don't use.</em>
-	/// Impelemnt <c>StateActionUpdateHandler.OnAction</c> instead.<br/>
+	/// Impelemnt <c>AStateBehaviour.OnAction</c> instead.<br/>
 	/// Must be public to implement <c>ICommsRadioMode</c>.
 	/// </summary>
 	public bool ButtonBCustomAction()

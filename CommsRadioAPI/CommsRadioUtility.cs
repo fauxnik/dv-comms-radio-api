@@ -4,7 +4,7 @@ using UnityEngine;
 namespace CommsRadioAPI;
 
 /// <summary>
-/// A convenience class that allows classes that inherit <c>StateActionUpdateHandler</c> to interact with their parent <c>CommsRadioMode</c>.
+/// A convenience class that allows classes that inherit <c>AStateBehaviour</c> to interact with their parent <c>CommsRadioMode</c>.
 /// </summary>
 public class CommsRadioUtility
 {

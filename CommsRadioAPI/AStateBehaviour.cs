@@ -1,9 +1,9 @@
 namespace CommsRadioAPI;
 
 /// <summary>
-/// Implement this class to define the behaviour of a Comms Radio mode in a given state.
+/// Implement this abstract class to define the behaviour of a Comms Radio mode in a given state.
 /// </summary>
-public abstract class StateActionUpdateHandler
+public abstract class AStateBehaviour
 {
 	/// <summary>
 	/// The state of the Comms Radio when it exhibits the behaviour described by the implementing class.
@@ -14,7 +14,7 @@ public abstract class StateActionUpdateHandler
 	/// Instantiate a new action/update handler with the given Comms Radio state.
 	/// </summary>
 	/// <param name="state">The state of the Comms Radio when it exhibits the behaviour of the handler class.</param>
-	public StateActionUpdateHandler(CommsRadioState state)
+	public AStateBehaviour(CommsRadioState state)
 	{
 		this.state = state;
 	}
@@ -42,7 +42,7 @@ public abstract class StateActionUpdateHandler
 	/// <param name="utility">Provides access to some useful functionality, eg. <c>StartCoroutine</c>.</param>
 	/// <param name="action">The action that the player has taken.</param>
 	/// <returns>The next state/action/update handler to use. Do NOT return <c>this</c>. Use <c>ButtonBehaviourType.Ignore</c> instead if you wish to ignore the Up & Down buttons.</returns>
-	public abstract StateActionUpdateHandler OnAction(CommsRadioUtility utility, InputAction action);
+	public abstract AStateBehaviour OnAction(CommsRadioUtility utility, InputAction action);
 
 	/// <summary>
 	/// This method runs on each cycle of the game loop.<br/>
@@ -50,7 +50,7 @@ public abstract class StateActionUpdateHandler
 	/// </summary>
 	/// <param name="utility">Provides access to some useful functionality, eg. <c>StartCoroutine</c>.</param>
 	/// <returns>The next state/action/update handler to use. Return <c>this</c> if no state transition is necessary.</returns>
-	public virtual StateActionUpdateHandler OnUpdate(CommsRadioUtility utility)
+	public virtual AStateBehaviour OnUpdate(CommsRadioUtility utility)
 	{
 		return this;
 	}
