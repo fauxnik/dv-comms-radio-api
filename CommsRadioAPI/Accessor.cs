@@ -6,7 +6,7 @@ namespace CommsRadioAPI;
 
 internal static class Accessor
 {
-	internal static DV.CommsRadioController? CommsRadioController { get; private set; }
+	internal static CommsRadioController? CommsRadioController { get; private set; }
 
 	internal static CommsRadioDisplay? CommsRadioDisplay { get; private set; }
 	internal static ArrowLCD? CommsRadioArrow { get; private set; }
@@ -27,10 +27,10 @@ internal static class Accessor
 	internal static AudioClip? SelectVehicleSound { get; private set; }
 	internal static AudioClip? RemoveVehicleSound { get; private set; }
 
-	[HarmonyPatch(typeof(DV.CommsRadioController), "Awake")]
+	[HarmonyPatch(typeof(CommsRadioController), "Awake")]
 	internal static class AcquireResourcesPatch
 	{
-		static void Postfix(DV.CommsRadioController __instance)
+		static void Postfix(CommsRadioController __instance)
 		{
 			CommsRadioController = __instance;
 
@@ -56,6 +56,8 @@ internal static class Accessor
 
 			ValidMaterial = crewVehicleControl.validMaterial;
 			InvalidMaterial = crewVehicleControl.invalidMaterial;
+
+			ControllerAPI.Ready?.Invoke();
 		}
 	}
 }

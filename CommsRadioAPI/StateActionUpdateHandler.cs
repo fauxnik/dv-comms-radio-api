@@ -1,12 +1,19 @@
 namespace CommsRadioAPI;
 
 /// <summary>
-/// Implement this class to define the behavior of the Comms Radio when it's in a given state.
+/// Implement this class to define the behaviour of a Comms Radio mode in a given state.
 /// </summary>
 public abstract class StateActionUpdateHandler
 {
+	/// <summary>
+	/// The state of the Comms Radio when it exhibits the behaviour described by the implementing class.
+	/// </summary>
 	public readonly CommsRadioState state;
 
+	/// <summary>
+	/// Instantiate a new action/update handler with the given Comms Radio state.
+	/// </summary>
+	/// <param name="state">The state of the Comms Radio when it exhibits the behaviour of the handler class.</param>
 	public StateActionUpdateHandler(CommsRadioState state)
 	{
 		this.state = state;

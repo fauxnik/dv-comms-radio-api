@@ -1,9 +1,9 @@
 namespace CommsRadioAPI;
 
 /// <summary>
-/// Refers to a Comms Radio mode from the vanilla game.
+/// Refers to Comms Radio modes from the vanilla game.
 /// </summary>
-public enum VanillaModes
+public enum VanillaMode
 {
 	/// <summary>
 	/// Rerails locomotives and wagons.

@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace CommsRadioAPI;
 
+/// <summary>
+/// Contains the method for creating new modes for the Comms Radio.
+/// </summary>
 public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 {
 	private CommsRadioUtility proxy;
@@ -14,17 +17,18 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 	internal Transform? signalOrigin;
 
 	/// <summary>
-	/// Create a new mode entry in the Comms Radio.
+	/// Create a new mode in the Comms Radio.
 	/// </summary>
-	/// <param name="startingState">The starting state/action/update handler. Its button behavior must be <c>ButtonBehaviourType.Regular</c>.</param>
-	/// <param name="laserColor">The color of the laser beam.</param>
-	/// <param name="insertBeforeTest">Optional.<br/>Return true for the mode the new mode will be inserted before.<br/>If none return true or no predicate is given, the mode will be inserted at the end of the list.</param>
+	/// <param name="startingState">The starting state/action/update handler. Its button behaviour must be <c>ButtonBehaviourType.Regular</c>.</param>
+	/// <param name="laserColor"><em>Optional.</em><br/>The color of the laser beam.</param>
+	/// <param name="insertBefore"><em>Optional.</em><br/>Return true for the mode the new mode will be inserted before.<br/>If none return true or no predicate is given, the mode will be inserted at the end of the list.</param>
 	/// <returns>The Comms Radio mode that was created.</returns>
 	/// <exception cref="ArgumentException">Throws an exception if the provided starting state has a button behaviour other than <c>ButtonBehaviourType.Regular</c>.</exception>
-	public static CommsRadioMode Create(StateActionUpdateHandler startingState, Color? laserColor, Predicate<ICommsRadioMode>? insertBeforeTest)
+	public static CommsRadioMode Create(StateActionUpdateHandler startingState, Color? laserColor, Predicate<ICommsRadioMode>? insertBefore)
 	{
 		if (startingState.state.behaviour != ButtonBehaviourType.Regular) { throw new ArgumentException($"Starting state must have a button beviour type of Regular, but it has {startingState.state.behaviour}."); }
-		CommsRadioMode mode = ControllerAPI.AddMode(insertBeforeTest);
+		CommsRadioMode mode = ControllerAPI.AddMode(insertBefore);
+		mode.proxy ??= new CommsRadioUtility(mode); // not sure if GameObject.AddComponent will call the class constructor
 		mode.laserColor = laserColor ?? Color.white;
 		mode.startingState = startingState;
 		mode.activeState = startingState;
@@ -37,7 +41,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 		return mode;
 	}
 
-	public CommsRadioMode()
+	private CommsRadioMode()
 	{
 		proxy = new CommsRadioUtility(this);
 	}
@@ -78,27 +82,51 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 	private ArrowLCD? lcdArrow;
 	private Light? ledLight;
 
-	public void Awake()
+	// Unity lifecycle methods don't need to be public
+	//   ↪ https://discussions.unity.com/t/does-the-access-modifier-of-start-awake-onenable-make-a-difference-to-unity/147910/3
+	private void Awake()
 	{
 		signalOrigin = transform;
 	}
 
+	/// <summary>
+	/// <em>Don't use.</em>
+	/// Override <c>StateActionUpdateHandler.OnEnter</c> instead.<br/>
+	/// Must be public to implement <c>ICommsRadioMode</c>.
+	/// </summary>
 	public void Enable()
 	{
 		activeState?.OnEnter(proxy);
 	}
 
+	/// <summary>
+	/// <em>Don't use.</em>
+	/// Override <c>StateActionUpdateHandler.OnLeave</c> instead.<br/>
+	/// Must be public to implement <c>ICommsRadioMode</c>.
+	/// </summary>
 	public void Disable()
 	{
 		activeState?.OnLeave(proxy);
 		StopAllCoroutines();
 	}
 
+	/// <summary>
+	/// Override the signal origin.
+	/// <em>(TODO: What does this mean?)</em><br/>
+	/// By default, the signal origin will be the transform of the <c>CommsRadioController</c> game object.<br/>
+	/// Must be public to implement <c>ICommsRadioMode</c>.
+	/// </summary>
+	/// <param name="transform"></param>
 	public void OverrideSignalOrigin(Transform transform)
 	{
 		signalOrigin = transform;
 	}
 
+	/// <summary>
+	/// <em>Don't use.</em>
+	/// Impelemnt <c>StateActionUpdateHandler.OnAction</c> instead.<br/>
+	/// Must be public to implement <c>ICommsRadioMode</c>.
+	/// </summary>
 	public void OnUse()
 	{
 		Main.Log("Comms Radio activated.");
@@ -108,14 +136,28 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 		TransitionToState(nextState);
 	}
 
+	/// <summary>
+	/// <em>Don't use.</em>
+	/// Override <c>StateActionUpdateHandler.OnUpdate</c> instead.<br/>
+	/// Must be public to implement <c>ICommsRadioMode</c>.
+	/// </summary>
 	public void OnUpdate()
 	{
 		if (activeState == null) { ThrowNullActiveState(); }
 		TransitionToState(activeState.OnUpdate(proxy));
 	}
 
+	/// <summary>
+	/// <em>Don't use.</em><br/>
+	/// Must be public to implement <c>ICommsRadioMode</c>.
+	/// </summary>
 	public ButtonBehaviourType ButtonBehaviour { get; private set; }
 
+	/// <summary>
+	/// <em>Don't use.</em>
+	/// Impelemnt <c>StateActionUpdateHandler.OnAction</c> instead.<br/>
+	/// Must be public to implement <c>ICommsRadioMode</c>.
+	/// </summary>
 	public bool ButtonACustomAction()
 	{
 		Main.Log("Button A pressed.");
@@ -125,6 +167,11 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 		return true;
 	}
 
+	/// <summary>
+	/// <em>Don't use.</em>
+	/// Impelemnt <c>StateActionUpdateHandler.OnAction</c> instead.<br/>
+	/// Must be public to implement <c>ICommsRadioMode</c>.
+	/// </summary>
 	public bool ButtonBCustomAction()
 	{
 		Main.Log("Button B pressed.");
@@ -134,11 +181,20 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 		return true;
 	}
 
+	/// <summary>
+	/// <em>Don't use.</em>
+	/// Define the <c>CommsRadioState</c> of the starting state passed to <c>CommsRadioMode.Create</c> instead.<br/>
+	/// Must be public to implement <c>ICommsRadioMode</c>.
+	/// </summary>
 	public void SetStartingDisplay()
 	{
 		if (startingState == null) { ThrowNullStartingState(); }
 		TransitionToState(startingState);
 	}
 
+	/// <summary>
+	/// Get the color of the laser beam used for this Comms Radio mode.<br/>
+	/// Must be public to implement <c>ICommsRadioMode</c>.
+	/// </summary>
 	public Color GetLaserBeamColor() { return laserColor; }
 }

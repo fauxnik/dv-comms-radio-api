@@ -1,9 +1,9 @@
 namespace CommsRadioAPI;
 
 /// <summary>
-/// The vanilla sounds that eminate from the Comms Radio.
+/// Refers to the vanilla sounds that eminate from the Comms Radio.
 /// </summary>
-public enum CommsSound
+public enum VanillaSoundCommsRadio
 {
 	Confirm,
 	Cancel,

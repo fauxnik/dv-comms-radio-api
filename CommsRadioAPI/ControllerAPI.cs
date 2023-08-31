@@ -7,27 +7,35 @@ using UnityEngine;
 
 namespace CommsRadioAPI;
 
+/// <summary>
+/// A conveience API for the <c>CommsRadioController</c> class.
+/// </summary>
 public static class ControllerAPI
 {
 	/// <summary>
-	/// Get a vanilla mode from the CommsRadioController.
+	/// Subscribe to know when the Comms Radio is ready to receive new modes.
+	/// </summary>
+	public static Action? Ready;
+
+	/// <summary>
+	/// Get a vanilla Comms Radio mode from the <c>CommsRadioController</c>.
 	/// </summary>
 	/// <param name="mode">The mode to retrieve.</param>
-	/// <returns></returns>
-	public static ICommsRadioMode? GetVanillaMode(VanillaModes mode)
+	/// <returns>The requeted vanilla Comms Radio mode.</returns>
+	public static ICommsRadioMode? GetVanillaMode(VanillaMode mode)
 	{
 		CommsRadioController? controller = Accessor.CommsRadioController;
 		if (controller == null) { return default; }
 		return mode switch
 		{
-			VanillaModes.Rerail => controller.rerailControl,
-			VanillaModes.Junction => controller.switchControl,
-			VanillaModes.Clear => controller.deleteControl,
-			VanillaModes.SummonCrewVehicle => controller.crewVehicleControl,
-			VanillaModes.Spawn => controller.carSpawnerControl,
-			VanillaModes.LoadCargo => controller.cargoLoaderControl,
-			VanillaModes.Damage => controller.carDamageControl,
-			VanillaModes.LED => controller.commsRadioLight,
+			VanillaMode.Rerail => controller.rerailControl,
+			VanillaMode.Junction => controller.switchControl,
+			VanillaMode.Clear => controller.deleteControl,
+			VanillaMode.SummonCrewVehicle => controller.crewVehicleControl,
+			VanillaMode.Spawn => controller.carSpawnerControl,
+			VanillaMode.LoadCargo => controller.cargoLoaderControl,
+			VanillaMode.Damage => controller.carDamageControl,
+			VanillaMode.LED => controller.commsRadioLight,
 			_ => default,
 		};
 	}
@@ -50,17 +58,17 @@ public static class ControllerAPI
 		return mode;
 	}
 
-	internal static void PlaySound(CommsSound sound, Transform source)
+	internal static void PlaySound(VanillaSoundCommsRadio sound, Transform source)
 	{
 		AudioClip? audio = sound switch
 		{
-			CommsSound.Confirm => Accessor.ConfirmSound,
-			CommsSound.Cancel => Accessor.CancelSound,
-			CommsSound.Warning => Accessor.WarningSound,
-			CommsSound.Switch => Accessor.SwitchSound,
-			CommsSound.ModeEnter => Accessor.ModeEnterSound,
-			CommsSound.HoverOver => Accessor.HoverOverSound,
-			CommsSound.MoneyRemoved => Accessor.MoneyRemovedSound,
+			VanillaSoundCommsRadio.Confirm => Accessor.ConfirmSound,
+			VanillaSoundCommsRadio.Cancel => Accessor.CancelSound,
+			VanillaSoundCommsRadio.Warning => Accessor.WarningSound,
+			VanillaSoundCommsRadio.Switch => Accessor.SwitchSound,
+			VanillaSoundCommsRadio.ModeEnter => Accessor.ModeEnterSound,
+			VanillaSoundCommsRadio.HoverOver => Accessor.HoverOverSound,
+			VanillaSoundCommsRadio.MoneyRemoved => Accessor.MoneyRemovedSound,
 			_ => null,
 		};
 		if (audio == null)
@@ -72,13 +80,13 @@ public static class ControllerAPI
 		CommsRadioController.PlayAudioFromRadio(audio, source);
 	}
 
-	internal static void PlayVehicleSound(VehicleSound sound, TrainCar source, bool parentToWorld = false)
+	internal static void PlayVehicleSound(VanillaSoundVehicle sound, TrainCar source, bool parentToWorld = false)
 	{
 		AudioClip? audio = sound switch
 		{
-			VehicleSound.SpawnVehicle => Accessor.SpawnVehicleSound,
-			VehicleSound.SelectVehicle => Accessor.SelectVehicleSound,
-			VehicleSound.RemoveVehicle => Accessor.RemoveVehicleSound,
+			VanillaSoundVehicle.SpawnVehicle => Accessor.SpawnVehicleSound,
+			VanillaSoundVehicle.SelectVehicle => Accessor.SelectVehicleSound,
+			VanillaSoundVehicle.RemoveVehicle => Accessor.RemoveVehicleSound,
 			_ => null,
 		};
 		if (audio == null)
@@ -88,5 +96,15 @@ public static class ControllerAPI
 		}
 
 		CommsRadioController.PlayAudioFromCar(audio, source, parentToWorld);
+	}
+
+	internal static Material? GetMaterial(VanillaMaterial material)
+	{
+		return material switch
+		{
+			VanillaMaterial.Valid => Accessor.ValidMaterial,
+			VanillaMaterial.Invalid => Accessor.InvalidMaterial,
+			_ => null,
+		};
 	}
 }
