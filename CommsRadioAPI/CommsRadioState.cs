@@ -55,4 +55,26 @@ public sealed class CommsRadioState
 		led = ledState;
 		behaviour = buttonBehaviour;
 	}
+
+	/// <summary>
+	/// Creates a new Comms Radio state where the provided parameters are overlayed onto the existing state.
+	/// </summary>
+	/// <param name="titleText"><em>Optional.</em><br/>Text to be displayed in large letters at the top of the LCD screen.</param>
+	/// <param name="contentText"><em>Optional.</em><br/>Text to be displayed in small letters below the title on the LCD screen.</param>
+	/// <param name="actionText"><em>Optional.</em><br/>Text to be displayed in large letters at the bottom of the LCD screen.</param>
+	/// <param name="arrowState"><em>Optional.</em><br/>Whether the arrow on the LCD screen should be off, point left, or point right.</param>
+	/// <param name="ledState"><em>Optional.</em><br/>Whether the LED light on the back of the Comms Radio should be off or on.</param>
+	/// <param name="buttonBehaviour"><em>Optional.</em><br/>Whether the up and down buttons should switch between Comms Radio modes (Regular), trigger the state action handler (Override), or be completely ignored (Ignore).</param>
+	/// <returns>The new Comms Radio state.</returns>
+	public CommsRadioState Fork(string? titleText = null, string? contentText = null, string? actionText = null, LCDArrowState? arrowState = null, LEDState? ledState = null, ButtonBehaviourType? buttonBehaviour = null)
+	{
+		return new CommsRadioState(
+			titleText ?? lcdTitle,
+			contentText ?? lcdContent,
+			actionText ?? lcdAction,
+			arrowState ?? lcdArrow,
+			ledState ?? led,
+			buttonBehaviour ?? behaviour
+		);
+	}
 }
