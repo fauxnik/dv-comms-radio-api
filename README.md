@@ -90,7 +90,7 @@ CommsRadioMode mode = CommsRadioMode.Create(MyInitialStateBehaviour, insertBefor
 
 ### Working with state, actions, and update
 
-State, player input handling, and game update handling are encapsulated by `AStateBehaviour`, which consumig mods must extend. Transitioning from one state to another is achieved by returning a new `AStateBehaviour` from one of the handler methods. This can also be used to change the behaviour in response to player input.
+State, player input handling, and game update handling are encapsulated by `AStateBehaviour`, which consuming mods must extend. Transitioning from one state to another is achieved by returning a new `AStateBehaviour` from one of the handler methods. This can also be used to change the behaviour in response to player input.
 
 ```csharp
 class CounterBehaviour : AStateBehaviour
