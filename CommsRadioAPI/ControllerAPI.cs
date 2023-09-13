@@ -77,6 +77,12 @@ public static class ControllerAPI
 			return;
 		}
 
+		if (audio == Accessor.MoneyRemovedSound)
+		{
+			audio.Play2D(1f, false);
+			return;
+		}
+
 		CommsRadioController.PlayAudioFromRadio(audio, source);
 	}
 
