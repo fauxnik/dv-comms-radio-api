@@ -24,7 +24,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 	/// <param name="insertBefore"><em>Optional.</em><br/>Return true for the mode the new mode will be inserted before.<br/>If none return true or no predicate is given, the mode will be inserted at the end of the list.</param>
 	/// <returns>The Comms Radio mode that was created.</returns>
 	/// <exception cref="ArgumentException">Throws an exception if the provided starting state has a button behaviour other than <c>ButtonBehaviourType.Regular</c>.</exception>
-	public static CommsRadioMode Create(AStateBehaviour startingState, Color? laserColor, Predicate<ICommsRadioMode>? insertBefore)
+	public static CommsRadioMode Create(AStateBehaviour startingState, Color? laserColor = null, Predicate<ICommsRadioMode>? insertBefore = null)
 	{
 		if (startingState.state.behaviour != ButtonBehaviourType.Regular) { throw new ArgumentException($"Starting state must have a button beviour type of Regular, but it has {startingState.state.behaviour}."); }
 		CommsRadioMode mode = ControllerAPI.AddMode(insertBefore);
