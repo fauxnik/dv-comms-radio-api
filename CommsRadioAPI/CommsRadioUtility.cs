@@ -16,6 +16,11 @@ public class CommsRadioUtility
 	}
 
 	/// <summary>
+	/// Provides readonly access to the signal origin transform stored on the Comms Radio mode.
+	/// </summary>
+	public Transform SignalOrigin { get => target.signalOrigin ?? target.transform; }
+
+	/// <summary>
 	/// Start a coroutine on the Comms Radio mode.
 	/// </summary>
 	/// <param name="routine">The return value from a coroutine method.</param>
