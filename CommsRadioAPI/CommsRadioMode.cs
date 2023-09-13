@@ -68,14 +68,15 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 		ButtonBehaviour = state.behaviour;
 	}
 
-	private void TransitionToState(AStateBehaviour nextState)
+	private bool TransitionToState(AStateBehaviour nextState)
 	{
-		if (activeState == nextState) { return; }
+		if (activeState == nextState) { return false; }
 		activeState?.OnLeave(proxy);
 		StopAllCoroutines();
 		nextState.OnEnter(proxy);
 		activeState = nextState;
 		ApplyState();
+		return true;
 	}
 
 	private CommsRadioDisplay? display;
@@ -164,8 +165,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 		Main.Log("Button A pressed.");
 		if (activeState == null) { ThrowNullActiveState(); }
 		// TODO: is ButtonA actually the up button?
-		TransitionToState(activeState.OnAction(proxy, InputAction.Up));
-		return true;
+		return TransitionToState(activeState.OnAction(proxy, InputAction.Up));
 	}
 
 	/// <summary>
@@ -178,8 +178,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 		Main.Log("Button B pressed.");
 		if (activeState == null) { ThrowNullActiveState(); }
 		// TODO: is ButtonB actually the down button?
-		TransitionToState(activeState.OnAction(proxy, InputAction.Down));
-		return true;
+		return TransitionToState(activeState.OnAction(proxy, InputAction.Down));
 	}
 
 	/// <summary>
