@@ -126,7 +126,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 
 	/// <summary>
 	/// <em>Don't use.</em>
-	/// Impelemnt <c>AStateBehaviour.OnAction</c> instead.<br/>
+	/// Implement <c>AStateBehaviour.OnAction</c> instead.<br/>
 	/// Must be public to implement <c>ICommsRadioMode</c>.
 	/// </summary>
 	public void OnUse()
@@ -157,7 +157,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 
 	/// <summary>
 	/// <em>Don't use.</em>
-	/// Impelemnt <c>AStateBehaviour.OnAction</c> instead.<br/>
+	/// Implement <c>AStateBehaviour.OnAction</c> instead.<br/>
 	/// Must be public to implement <c>ICommsRadioMode</c>.
 	/// </summary>
 	public bool ButtonACustomAction()
@@ -170,7 +170,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 
 	/// <summary>
 	/// <em>Don't use.</em>
-	/// Impelemnt <c>AStateBehaviour.OnAction</c> instead.<br/>
+	/// Implement <c>AStateBehaviour.OnAction</c> instead.<br/>
 	/// Must be public to implement <c>ICommsRadioMode</c>.
 	/// </summary>
 	public bool ButtonBCustomAction()
