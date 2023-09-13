@@ -62,7 +62,7 @@ Download the API archive, install it using UnityModManager Installer, and add a 
 You'll likely need to add a reference path to `Directory.Build.targets` to tell the compiler where the API assembly is. Adjust it to match your Derail Valley install directory.
 
 ```
-C:\Program Files (x86)\Steam\steamapps\common\Derail Valley\Mods\
+C:\Program Files (x86)\Steam\steamapps\common\Derail Valley\Mods\CommsRadioAPI\
 ```
 
 ### Creating a Comms Radio mode
