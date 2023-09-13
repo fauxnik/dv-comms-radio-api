@@ -87,7 +87,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 	//   ↪ https://discussions.unity.com/t/does-the-access-modifier-of-start-awake-onenable-make-a-difference-to-unity/147910/3
 	private void Awake()
 	{
-		signalOrigin = transform;
+		signalOrigin ??= transform;
 	}
 
 	/// <summary>
