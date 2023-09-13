@@ -96,6 +96,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 	/// </summary>
 	public void Enable()
 	{
+		activeState = startingState;
 		activeState?.OnEnter(proxy);
 	}
 
@@ -188,8 +189,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 	/// </summary>
 	public void SetStartingDisplay()
 	{
-		if (startingState == null) { ThrowNullStartingState(); }
-		TransitionToState(startingState);
+		ApplyState();
 	}
 
 	/// <summary>
