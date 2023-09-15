@@ -22,18 +22,21 @@ public abstract class AStateBehaviour
 	/// <summary>
 	/// This method is called when the instance becomes the active state of the Comms Radio.<br/>
 	/// This can happen when transitioning to this state or when enabling the Comms Radio.<br/>
-	/// Use it to do any required setup.
+	/// Use it to do any required setup.<br/>
+	/// Be sure to stop any long running coroutines that are started here in <c>OnLeave</c>!
 	/// </summary>
 	/// <param name="utility">Provides access to some useful functionality, eg. <c>StartCoroutine</c>.</param>
-	public virtual void OnEnter(CommsRadioUtility utility) {}
+	/// <param name="previous">The <c>AStateBehaviour</c> that was previously active, or <c>null</c> if the mode is being enabled.
+	public virtual void OnEnter(CommsRadioUtility utility, AStateBehaviour? previous) {}
 
 	/// <summary>
 	/// This method is called when the instance is no longer the active state of the Comms Radio.<br/>
 	/// This can happen when transitioning away from this state or when disabling the Comms Radio.<br/>
-	/// Use it to do any required cleanup.
+	/// Use it to do any required cleanup, like stopping long running coroutines that were started by <c>OnEnter</c>.
 	/// </summary>
 	/// <param name="utility">Provides access to some useful functionality, eg. <c>StopCoroutine</c>.</param>
-	public virtual void OnLeave(CommsRadioUtility utility) {}
+	/// <param name="next">The <c>AStateBehaviour</c> that is about to become active, or <c>null</c> if the mode is being disabled.
+	public virtual void OnLeave(CommsRadioUtility utility, AStateBehaviour? next) {}
 
 	/// <summary>
 	/// Use this method to respond to player input to the Comms Radio.<br/>

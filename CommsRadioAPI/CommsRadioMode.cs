@@ -71,9 +71,10 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 	private bool TransitionToState(AStateBehaviour nextState)
 	{
 		if (activeState == nextState) { return false; }
-		activeState?.OnLeave(proxy);
-		StopAllCoroutines();
-		nextState.OnEnter(proxy);
+		activeState?.OnLeave(proxy, nextState);
+		// We can't automatically stop all coroutines here, as some behaviours may need to wait longer than their lifespan to take certain actions.
+		// TODO: Can we establish a timeout for coroutines?
+		nextState.OnEnter(proxy, activeState);
 		activeState = nextState;
 		ApplyState();
 		return true;
@@ -98,7 +99,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 	public void Enable()
 	{
 		activeState = startingState;
-		activeState?.OnEnter(proxy);
+		activeState?.OnEnter(proxy, null);
 	}
 
 	/// <summary>
@@ -108,8 +109,9 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 	/// </summary>
 	public void Disable()
 	{
-		activeState?.OnLeave(proxy);
-		StopAllCoroutines();
+		activeState?.OnLeave(proxy, null);
+		// We can't automatically stop all coroutines here, as some behaviours may need to wait longer than their lifespan to take certain actions.
+		// TODO: Can we establish a timeout for coroutines?
 	}
 
 	/// <summary>
