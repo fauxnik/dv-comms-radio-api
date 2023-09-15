@@ -82,7 +82,7 @@ CommsRadioMode mode = CommsRadioMode.Create(MyInitialStateBehaviour, laserColor:
 To specify the ordering of the Comms Radio mode, pass an `insertBefore` predicate.
 
 ```csharp
-CommsRadioMode mode = CommsRadioMode.Create(MyInitialStateBehaviour, insertBefore: crm => crm == ControllerAPI.GetVanillaMode(VanillaMode.LED));
+CommsRadioMode mode = CommsRadioMode.Create(MyInitialStateBehaviour, insertBefore: mode => mode == ControllerAPI.GetVanillaMode(VanillaMode.LED));
 ```
 
 > [!IMPORTANT] 
