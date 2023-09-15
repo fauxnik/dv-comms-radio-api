@@ -12,3 +12,8 @@ trim_trailing_whitespace = true
 
 [*.md]
 trim_trailing_whitespace = false
+
+[*.{yml,yaml}]
+# YAML doesn't allow tabs
+indent_style = space
+indent_size = 2

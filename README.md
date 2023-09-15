@@ -11,7 +11,7 @@
 <div align="center">
 	<h1>Comms Radio API</h1>
 	<p>
-		A framework mod for <a href="http://www.derailvalley.com/">Derail Valley</a> that enables other mods to more easily create entries in the comms radio.
+		A framework mod for <a href="http://www.derailvalley.com/">Derail Valley</a> that enables other mods to create entries in the comms radio more easily.
 		<br />
 		<br />
 		<a href="https://github.com/fauxnik/dv-comms-radio-api/issues">Report Bug</a>
@@ -28,7 +28,7 @@
 	<summary>Table of Contents</summary>
 	<ol>
 		<li><a href="#about-the-project">About The Project</a></li>
-		<li><a href="#api-documentation">API Documentation</a></li>
+		<li><a href="#how-to-use">How To Use</a></li>
 		<li><a href="#building">Building</a></li>
 		<li><a href="#packaging">Packaging</a></li>
 		<li><a href="#license">License</a></li>
@@ -42,16 +42,89 @@
 
 ## About The Project
 
-A framework mod for <a href="http://www.derailvalley.com/">Derail Valley</a> that enables other mods to more easily create entries in the comms radio.
+A framework mod for <a href="http://www.derailvalley.com/">Derail Valley</a> that enables other mods to create entries in the comms radio more easily.
 
 
 
 
-<!-- API DOCUMENTATION -->
+<!-- HOW TO USE -->
 
-## API Documentation
+## How To Use
 
-TODO: write API documentation here
+### Setup
+
+Download the API archive, install it using UnityModManager Installer, and add a reference in your project file.
+
+```xml
+<Reference Include="CommsRadioAPI"/>
+```
+
+You'll likely need to add a reference path to `Directory.Build.targets` to tell the compiler where the API assembly is. Adjust it to match your Derail Valley install directory.
+
+```
+C:\Program Files (x86)\Steam\steamapps\common\Derail Valley\Mods\CommsRadioAPI\
+```
+
+### Creating a Comms Radio mode
+
+Creating a Comms Radio mode is done via the static `CommsRadioMode.Create` method.
+
+```csharp
+CommsRadioMode mode = CommsRadioMode.Create(MyInitialStateBehaviour);
+```
+
+To change the laser beam color, pass the `laserColor` parameter.
+
+```csharp
+CommsRadioMode mode = CommsRadioMode.Create(MyInitialStateBehaviour, laserColor: Color.CornflowerBlue);
+```
+
+To specify the ordering of the Comms Radio mode, pass an `insertBefore` predicate.
+
+```csharp
+CommsRadioMode mode = CommsRadioMode.Create(MyInitialStateBehaviour, insertBefore: crm => crm == ControllerAPI.GetVanillaMode(VanillaMode.LED));
+```
+
+> [!IMPORTANT] 
+> The initial state passed to `CommsRadioMode.Create` _must_ have `ButtonBehaviourType.Regular` as its button behaviour.
+
+### Working with state, actions, and update
+
+State, player input handling, and game update handling are encapsulated by `AStateBehaviour`, which consuming mods must extend. Transitioning from one state to another is achieved by returning a new `AStateBehaviour` from one of the handler methods. This can also be used to change the behaviour in response to player input.
+
+```csharp
+class CounterBehaviour : AStateBehaviour
+{
+	int number;
+
+	public CounterBehaviour(int number) : base(new CommsRadioState(titleText: "Counter", contentText: number.ToString()))
+	{
+		this.number = number;
+	}
+
+	public override AStateBehaviour OnAction(CommsRadioUtility utility, InputAction action)
+	{
+		return action switch
+		{
+			// These transition to a new state with the same behaviour
+			InputAction.Up => new CounterBehaviour(number + 1),
+			InputAction.Down => new CounterBehaviour(number - 1),
+			// This transitions to an entirely different state and behaviour
+			InputAction.Activate => new MyInitialStateBehaviour(),
+			_ => throw new ArgumentException(),
+		};
+	}
+}
+```
+
+> [!NOTE]
+> `OnUpdate` is allowed to return `this` if no change in state has occurred in response to the game update tick.
+>
+> `OnAction` is not allowed to do this. Set the state's button behaviour to `ButtonBehaviourType.Ignore` instead.
+
+### Full API
+
+View the entire API at https://fauxnik.github.io/dv-comms-radio-api.
 
 
 

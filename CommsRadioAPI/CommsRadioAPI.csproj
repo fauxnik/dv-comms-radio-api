@@ -10,11 +10,13 @@
 	<!-- Derail Valley -->
 	<ItemGroup>
 		<Reference Include="Assembly-CSharp"/>
+		<Reference Include="DV.NAudio"/>
 	</ItemGroup>
 
 	<!-- Unity -->
 	<ItemGroup>
 		<Reference Include="UnityEngine"/>
+		<Reference Include="UnityEngine.AudioModule"/>
 		<Reference Include="UnityEngine.CoreModule"/>
 	</ItemGroup>
 
