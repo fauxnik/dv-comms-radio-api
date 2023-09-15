@@ -122,9 +122,9 @@ class CounterBehaviour : AStateBehaviour
 >
 > `OnAction` is not allowed to do this. Set the state's button behaviour to `ButtonBehaviourType.Ignore` instead.
 
-### Full API
+### Full API Documentation
 
-View the entire API at https://fauxnik.github.io/dv-comms-radio-api.
+View the [full API documentation](https://fauxnik.github.io/dv-comms-radio-api/api/CommsRadioAPI).
 
 
 
