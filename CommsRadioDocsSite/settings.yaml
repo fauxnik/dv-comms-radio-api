@@ -1,2 +1,4 @@
+# Preview locally with: dotnet run --project CommsRadioDocsSite/CommsRadioDocsSite.csproj -- preview --virtual-dir /dv-comms-radio-api
+LinkRoot: /dv-comms-radio-api
 SourceFiles:
   - ../../CommsRadioAPI/**/{!.git,!bin,!obj,!packages,!*.Tests,}/**/*.cs
