@@ -1,6 +1,6 @@
 {
 	"Id": "CommsRadioAPI",
-	"Version": "1.0.0",
+	"Version": "1.0.1",
 	"DisplayName": "CommsRadioAPI",
 	"Author": "Niko Fox",
 	"EntryMethod": "CommsRadioAPI.Main.Load",
