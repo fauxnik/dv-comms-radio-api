@@ -5,5 +5,5 @@
 	"Author": "Niko Fox",
 	"EntryMethod": "CommsRadioAPI.Main.Load",
 	"ManagerVersion": "0.27.3",
-	"Repository": "https://raw.githubusercontent.com/fauxnik/dv-comms-radio-api/blob/main/repository.json"
+	"Repository": "https://raw.githubusercontent.com/fauxnik/dv-comms-radio-api/main/repository.json"
 }
