@@ -1,4 +1,5 @@
 using DV;
+using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -26,18 +27,45 @@ public static class ControllerAPI
 	{
 		CommsRadioController? controller = Accessor.CommsRadioController;
 		if (controller == null) { return default; }
-		return mode switch
+		return GetCommsRadioMode(controller, mode);
+	}
+
+	/// <summary>
+	/// Determine whether a vanilla Comms Radio mode is enabled by the <c>CommsRadioController</c>.
+	/// </summary>
+	/// <param name="mode">The mode to test.</param>
+	/// <returns>True for enabled; false for disabled.</returns>
+	public static bool IsVanillaModeEnabled(VanillaMode mode)
+	{
+		CommsRadioController? controller = Accessor.CommsRadioController;
+		if (controller == null)
 		{
-			VanillaMode.Rerail => controller.rerailControl,
-			VanillaMode.Junction => controller.switchControl,
-			VanillaMode.Clear => controller.deleteControl,
-			VanillaMode.SummonCrewVehicle => controller.crewVehicleControl,
-			VanillaMode.Spawn => controller.carSpawnerControl,
-			VanillaMode.LoadCargo => controller.cargoLoaderControl,
-			VanillaMode.Damage => controller.carDamageControl,
-			VanillaMode.LED => controller.commsRadioLight,
-			_ => default,
-		};
+			Main.LogError("Can't find CommsRadioController instance! Returning false");
+			return false;
+		}
+
+		ICommsRadioMode? commsRadioMode = GetCommsRadioMode(controller, mode);
+		if (commsRadioMode == null)
+		{
+			Main.LogError($"Can't find {mode} mode! Returning false");
+			return false;
+		}
+
+		List<ICommsRadioMode>? allModes = (List<ICommsRadioMode>) AccessTools.Field(typeof(CommsRadioController), "allModes").GetValue(controller);
+		if (allModes == null)
+		{
+			Main.LogError("Can't find list of all modes from CommsRadioController instance! Returning false");
+			return false;
+		}
+
+		HashSet<int>? disabledModeIndices = (HashSet<int>) AccessTools.Field(typeof(CommsRadioController), "disabledModeIndices").GetValue(controller);
+		if (disabledModeIndices == null)
+		{
+			Main.LogError("Can't find list of disabled modes from CommsRadioController instance! Returning false");
+			return false;
+		}
+
+		return !disabledModeIndices.Contains(allModes.IndexOf(commsRadioMode));
 	}
 
 	internal static CommsRadioMode AddMode(Predicate<ICommsRadioMode>? insertBeforeTest)
@@ -111,6 +139,22 @@ public static class ControllerAPI
 			VanillaMaterial.Valid => Accessor.ValidMaterial,
 			VanillaMaterial.Invalid => Accessor.InvalidMaterial,
 			_ => null,
+		};
+	}
+
+	private static ICommsRadioMode? GetCommsRadioMode(CommsRadioController controller, VanillaMode mode)
+	{
+		return mode switch
+		{
+			VanillaMode.Rerail => controller.rerailControl,
+			VanillaMode.Junction => controller.switchControl,
+			VanillaMode.Clear => controller.deleteControl,
+			VanillaMode.SummonCrewVehicle => controller.crewVehicleControl,
+			VanillaMode.Spawn => controller.carSpawnerControl,
+			VanillaMode.LoadCargo => controller.cargoLoaderControl,
+			VanillaMode.Damage => controller.carDamageControl,
+			VanillaMode.LED => controller.commsRadioLight,
+			_ => default,
 		};
 	}
 }
