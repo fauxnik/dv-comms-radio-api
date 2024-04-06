@@ -100,6 +100,7 @@ public class CommsRadioMode : MonoBehaviour, ICommsRadioMode
 	{
 		activeState = startingState;
 		activeState?.OnEnter(proxy, null);
+		ApplyState();
 	}
 
 	/// <summary>
